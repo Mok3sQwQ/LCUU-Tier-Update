@@ -14,10 +14,10 @@ It also includes a supplementary script for formatting Viability Rankings (VR).
 
 ## Files Overview
 * `tier_updater.py`: The main interactive script. It handles downloading stats, processing the math, generating the report, and updating the JSON database.
-* `tiers.json`: The live database containing the current tier placements for all LC Pokémon[cite: 7]. This file is automatically updated whenever `tier_updater.py` processes new shifts.
+* `tiers.json`: The live database containing the current tier placements for all LC Pokémon. This file is automatically updated whenever `tier_updater.py` processes new shifts.
 * `vr_post.py`: A supplementary script that takes raw text lists of Pokémon and tiers and outputs formatted BBCode with official Smogon tier colors.
-* `stats.txt`: The raw text file downloaded from Smogon containing the monthly usage data[cite: 4, 6]. 
-* `tier_shift_report.txt`: The generated output file containing the BBCode summary of rises and drops[cite: 5, 6].
+* `stats.txt`: The raw text file downloaded from Smogon containing the monthly usage data. 
+* `tier_shift_report.txt`: The generated output file containing the BBCode summary of rises and drops.
 
 ## Prerequisites
 * Python 3.x installed on your system.
