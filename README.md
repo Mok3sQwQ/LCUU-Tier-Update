@@ -41,3 +41,5 @@ CustomizationTo tweak the standard configuration (such as adding recently banned
 3. Paste your corresponding column of tiers (S, A+, A, etc.) into the tiers_input variable.
 4. Run the script: `python vr_post.py`
 Copy the outputted BBCode directly into the Smogon forums.
+
+This script is an expanded version of a tool originally created by Albi_75. Huge thanks for providing the initial foundation! You can check out the original project here: https://github.com/Albi-75/lc-lowtiers-resources
