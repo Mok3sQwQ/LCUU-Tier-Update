@@ -1,5 +1,5 @@
 # LCUU-Tier-Update
-Use this to mantaine our beloved LCUU
+Use this to mantain our beloved LCUU
 
 An automated Python tool designed to streamline the tiering process for Smogon's Little Cup (LC) format. This script downloads monthly usage statistics directly from Smogon, calculates tier shifts based on dynamic standard metrics (T-values), and generates formatted BBCode ready for forum posts. 
 
