@@ -27,13 +27,13 @@ It also includes a supplementary script for formatting Viability Rankings (VR).
 1. Ensure `tier_updater.py` and `tiers.json` are in the same folder.
 2. Open your terminal or command prompt and run the script:
    `python tier_updater.py`
-The script will prompt you to enter the target year and month (e.g., 2026-06).  It will automatically:
-Determine the current Smogon Cycle (Quarter and Month).
-Download the relevant usage stats and save them as stats.txt.
-Calculate the usage cutoffs and determine any Rises or Drops.
-Generate a BBCode report and save it to tier_shift_report.txt
-Reorganize the tier arrays alphabetically and overwrite tiers.json with the new tierings.
-CustomizationTo tweak the standard configuration (such as adding recently banned Pokémon so their residual usage doesn't skew data, or changing the base T-value), open tierchanges.py in a text editor and modify the variables at the top of the file under the Configuration Settings section.
+3. The script will prompt you to enter the target year and month (e.g., 2026-06). It will automatically:
+3.1. Determine the current Smogon Cycle (Quarter and Month).
+3.2. Download the relevant usage stats and save them as stats.txt.
+3.3. Calculate the usage cutoffs and determine any Rises or Drops.
+3.4. Generate a BBCode report and save it to tier_shift_report.txt
+3.5. Reorganize the tier arrays alphabetically and overwrite tiers.json with the new tierings.
+Customization: To tweak the standard configuration (such as adding recently banned Pokémon so their residual usage doesn't skew data, or changing the base T-value), open tierchanges.py in a text editor and modify the variables at the top of the file under the Configuration Settings section.
 
 ## How to Use the vr_post.py
 1. Open vr_post.py in a text editor.
