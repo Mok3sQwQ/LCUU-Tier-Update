@@ -36,10 +36,10 @@ Reorganize the tier arrays alphabetically and overwrite tiers.json with the new 
 CustomizationTo tweak the standard configuration (such as adding recently banned Pokémon so their residual usage doesn't skew data, or changing the base T-value), open tierchanges.py in a text editor and modify the variables at the top of the file under the Configuration Settings section.
 
 ## How to Use the vr_post.py
-1. Open vrpostupdated.py in a text editor.
+1. Open vr_post.py in a text editor.
 2. Paste your raw column of Pokémon into the mons_input variable.
 3. Paste your corresponding column of tiers (S, A+, A, etc.) into the tiers_input variable.
 4. Run the script: `python vr_post.py`
-Copy the outputted BBCode directly into the Smogon forums.
+5. Copy the outputted BBCode directly into the Smogon forums.
 
 This script is an expanded version of a tool originally created by Albi_75. Huge thanks for providing the initial foundation! You can check out the original project here: https://github.com/Albi-75/lc-lowtiers-resources
