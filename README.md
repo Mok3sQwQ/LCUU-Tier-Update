@@ -35,7 +35,7 @@ Generate a BBCode report and save it to tier_shift_report.txt
 Reorganize the tier arrays alphabetically and overwrite tiers.json with the new tierings.
 CustomizationTo tweak the standard configuration (such as adding recently banned Pokémon so their residual usage doesn't skew data, or changing the base T-value), open tierchanges.py in a text editor and modify the variables at the top of the file under the Configuration Settings section.
 
-##How to Use the VR Formatter
+## How to Use the VR Formatter
 1. Open vrpostupdated.py in a text editor.
 2. Paste your raw column of Pokémon into the mons_input variable.
 3. Paste your corresponding column of tiers (S, A+, A, etc.) into the tiers_input variable.
