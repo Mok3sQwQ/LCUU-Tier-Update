@@ -26,14 +26,14 @@ recently_banned = ["Vulpix", "Gastly"]
 def load_tiers_file(filepath):
     """Loads the tier data from the JSON file."""
     if not os.path.exists(filepath):
-        print(f"❌ Error: Could not find '{filepath}'. Please create the file first!")
+        print(f" Error: Could not find '{filepath}'. Please create the file first!")
         sys.exit(1)
         
     with open(filepath, 'r', encoding='utf-8') as f:
         try:
             return json.load(f)
         except json.JSONDecodeError:
-            print(f"❌ Error: '{filepath}' contains invalid JSON data.")
+            print(f" Error: '{filepath}' contains invalid JSON data.")
             sys.exit(1)
 
 def update_and_save_tiers(filepath, tier_data, rises, drops):
@@ -59,7 +59,7 @@ def update_and_save_tiers(filepath, tier_data, rises, drops):
         
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(tier_data, f, indent=4)
-    print(f"📁 Updated tiers successfully saved to '{filepath}'!")
+    print(f" Updated tiers successfully saved to '{filepath}'!")
 
 def download_stats(stats_url):
     print(f"\nAttempting to download stats from:\n{stats_url}\n")
@@ -72,21 +72,21 @@ def download_stats(stats_url):
             content = response.read().decode('utf-8')
             
             if "<!DOCTYPE html>" in content[:100].lower() or "<html" in content[:100].lower():
-                print("❌ ERROR: Blocked by Cloudflare!")
+                print(" ERROR: Blocked by Cloudflare!")
                 print("The server sent a security webpage instead of the stats file.")
-                print("👉 FIX: Open the URL in your browser, copy all the text, and paste it into a local 'stats.txt' file.")
+                print(" FIX: Open the URL in your browser, copy all the text, and paste it into a local 'stats.txt' file.")
                 sys.exit(1)
 
             with open(STATS_FILE, 'w', encoding='utf-8') as f:
                 f.write(content)
                 
-        print(f"✅ Success! True text downloaded and saved as '{STATS_FILE}'.")
+        print(f" Success! True text downloaded and saved as '{STATS_FILE}'.")
 
     except urllib.error.HTTPError as e:
-        print(f"⚠️ HTTP Error {e.code}: The server rejected the request or the file doesn't exist.")
+        print(f" HTTP Error {e.code}: The server rejected the request or the file doesn't exist.")
         print(" Proceeding with existing local file if available...")
     except Exception as e:
-        print(f"⚠️ Download failed: {e}")
+        print(f" Download failed: {e}")
         print(" Proceeding with existing local file if available...")
 
 def read_local_stats(filepath):
@@ -94,7 +94,7 @@ def read_local_stats(filepath):
     print(f"\nReading local file: {filepath}...")
     
     if not os.path.exists(filepath):
-        print(f"❌ Error: Could not find '{filepath}'.")
+        print(f" Error: Could not find '{filepath}'.")
         print("Please save the Smogon text data into 'stats.txt' in this folder first!")
         return {}
 
@@ -112,7 +112,7 @@ def read_local_stats(filepath):
                         continue
                         
     if not usage_dict:
-        print("❌ Error: File read successfully, but no Pokémon data found.")
+        print(" Error: File read successfully, but no Pokémon data found.")
         print("Double check that you actually pasted the Smogon stats into stats.txt!")
         
     return usage_dict
@@ -163,7 +163,7 @@ if __name__ == "__main__":
                     break
             except ValueError:
                 pass
-        print("⚠️ Please enter a valid date in YYYY-MM format (e.g., 2026-06).")
+        print(" Please enter a valid date in YYYY-MM format (e.g., 2026-06).")
         
     dynamic_stats_url = f"https://www.smogon.com/stats/{yyyy_mm}/gen9lc-1630.txt"
 
@@ -206,8 +206,8 @@ if __name__ == "__main__":
     if end_of_gen_mode:
         allow_rises = False
 
-    print(f"\n✅ Recognized Date: {cycle_quarter} - Month {cycle_month}")
-    print("✅ Configuration Saved! Initiating Download...")
+    print(f"\n Recognized Date: {cycle_quarter} - Month {cycle_month}")
+    print(" Configuration Saved! Initiating Download...")
 
     # Download and process stats
     download_stats(dynamic_stats_url)
@@ -258,9 +258,9 @@ if __name__ == "__main__":
         try:
             with open(REPORT_FILE, "w", encoding="utf-8") as file:
                 file.write(final_report)
-            print(f"\n📁 Report successfully saved to '{REPORT_FILE}'!")
+            print(f"\n Report successfully saved to '{REPORT_FILE}'!")
         except IOError as e:
-            print(f"\n⚠️ Could not save to file: {e}")
+            print(f"\n Could not save to file: {e}")
 
         # Update and save the tiers JSON file if there were any shifts
         if rises or drops:
