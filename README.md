@@ -1,45 +1,119 @@
-# LCUU-Tier-Update
-Use this to mantain our beloved LCUU
+# LCUU Tier Update
 
-An automated Python tool designed to streamline the tiering process for Smogon's Little Cup (LC) format. This script downloads monthly usage statistics directly from Smogon, calculates tier shifts based on dynamic standard metrics (T-values), and generates formatted BBCode ready for forum posts. 
+An automated Python tool for maintaining Smogon's Little Cup (LC) tier data. It downloads monthly usage statistics, calculates tier shifts, updates the local tier database, and produces a forum-ready BBCode report.
 
-It also includes a supplementary script for formatting Viability Rankings (VR).
+It also includes a small Viability Rankings (VR) BBCode formatter.
 
 ## Features
-* **Automated Data Retrieval:** Securely fetches the latest `gen9lc-1630.txt` usage stats from Smogon while bypassing basic Cloudflare protections.
-* **Interactive Configuration:** Dynamically adjusts the target date (YYYY-MM), calculates the correct Smogon cycle quarter and month, and applies the appropriate mathematical cutoff metrics.
-* **Dynamic Database:** Automatically moves Pokémon between tiers (e.g., from LC OU to LC UU) based on the calculated shifts and updates the local JSON database file.
-* **BBCode Report Generation:** Outputs a clean, forum-ready tier shift report with usage percentages.
-* **VR Formatter:** Converts raw lists of Pokémon and tiers into highly formatted, color-coded BBCode for Viability Ranking threads.
 
-## Files Overview
-* `tier_updater.py`: The main interactive script. It handles downloading stats, processing the math, generating the report, and updating the JSON database.
-* `tiers.json`: The live database containing the current tier placements for all LC Pokémon. This file is automatically updated whenever `tier_updater.py` processes new shifts.
-* `vr_post.py`: A supplementary script that takes raw text lists of Pokémon and tiers and outputs formatted BBCode with official Smogon tier colors.
-* `stats.txt`: The raw text file downloaded from Smogon containing the monthly usage data. 
-* `tier_shift_report.txt`: The generated output file containing the BBCode summary of rises and drops.
+- Downloads `gen9lc-1630.txt` usage statistics from Smogon.
+- Calculates usage cutoffs from configurable T-values.
+- Identifies Pokémon that rise to LC OU or drop from LC OU.
+- Generates a BBCode tier-shift report with a spoiler section for base data.
+- Creates a dated backup before updating tier data.
+- Formats VR lists into color-coded BBCode.
 
-## Prerequisites
-* Python 3.x installed on your system.
-* No external libraries required (uses built-in `urllib`, `json`, `math`, and `os` modules).
+## Requirements
 
-## How to use tier_updater.py
-1. Ensure `tier_updater.py` and `tiers.json` are in the same folder.
-2. Open your terminal or command prompt and run the script:
-   `python tier_updater.py`
-3. The script will prompt you to enter the target year and month (e.g., 2026-06). It will automatically:
-3.1. Determine the current Smogon Cycle (Quarter and Month).
-3.2. Download the relevant usage stats and save them as stats.txt.
-3.3. Calculate the usage cutoffs and determine any Rises or Drops.
-3.4. Generate a BBCode report and save it to tier_shift_report.txt
-3.5. Reorganize the tier arrays alphabetically and overwrite tiers.json with the new tierings.
-Customization: To tweak the standard configuration (such as adding recently banned Pokémon so their residual usage doesn't skew data, or changing the base T-value), open tierchanges.py in a text editor and modify the variables at the top of the file under the Configuration Settings section.
+- Python 3.x
+- No external packages; the project only uses Python's standard library.
 
-## How to Use the vr_post.py
-1. Open vr_post.py in a text editor.
-2. Paste your raw column of Pokémon into the mons_input variable.
-3. Paste your corresponding column of tiers (S, A+, A, etc.) into the tiers_input variable.
-4. Run the script: `python vr_post.py`
-5. Copy the outputted BBCode directly into the Smogon forums.
+## Project Files
 
-This script is an expanded version of a tool originally created by Albi_75. Huge thanks for providing the initial foundation! You can check out the original project here: https://github.com/Albi-75/lc-lowtiers-resources
+| File | Purpose |
+| --- | --- |
+| `tier_updater.py` | Main script for downloading stats, calculating shifts, and updating tiers. |
+| `tiers.json` | Current tier database. |
+| `stats.txt` | Downloaded Smogon usage data. |
+| `tier_shift_report.txt` | Generated BBCode report. |
+| `tiers_backup_YYYYMM.json` | Automatic pre-update backup, created only when shifts are found. |
+| `vr_post.py` | VR list to BBCode formatter. |
+
+## Running the Tier Updater
+
+1. Open a terminal in the project folder.
+2. Run one of the following commands:
+
+   ```bash
+   python tier_updater.py
+   ```
+
+   On Windows, if `python` is not available, use:
+
+   ```powershell
+   py tier_updater.py
+   ```
+
+3. Enter the target stats month when prompted, for example:
+
+   ```text
+   2026-07
+   ```
+
+The script will:
+
+1. Determine the Smogon cycle quarter and month.
+2. Download and save the matching usage statistics as `stats.txt`.
+3. Calculate the usage cutoff and determine rises or drops.
+4. Save a BBCode report as `tier_shift_report.txt`.
+5. If shifts are found, back up the current tier data before overwriting `tiers.json`.
+
+For an input of `2026-07`, the backup file is named:
+
+```text
+tiers_backup_202607.json
+```
+
+## Report Output
+
+The report includes a base-data spoiler, followed by rise and drop sections:
+
+```bbcode
+========== TIER SHIFT REPORT ==========
+
+[SPOILER="Base Data"]
+
+Cycle: Q3 - Month 2 (August)
+
+Mode: Quick Drops Only (Rises Locked)
+
+Teams Parameter (T): 16 (base_t * 2)
+
+Applied Cutoff: 4.24%
+
+[/SPOILER]
+
+**Rises (To LC OU):**
+
+None (Rises are locked for this cycle phase)
+
+**Drops (From LC OU):**
+
+:zorua-hisui: Zorua-Hisui (2.56%)
+```
+
+## Configuration
+
+Edit the **Configuration Settings** section at the top of `tier_updater.py` to change:
+
+- `base_t`: Base teams parameter used in cutoff calculations.
+- `x_value`: Cutoff input value.
+- `end_of_gen_mode`: Locks rises at the end of a generation.
+- `recently_banned`: Pokémon to exclude from usage-based shifts.
+
+## Running the VR Formatter
+
+1. Open `vr_post.py`.
+2. Paste Pokémon names into `mons_input`.
+3. Paste their corresponding rankings into `tiers_input`.
+4. Run:
+
+   ```bash
+   python vr_post.py
+   ```
+
+5. Copy the generated BBCode into the Smogon forums.
+
+## Credits
+
+The VR formatter is based on a tool originally created by [Albi_75](https://github.com/Albi-75/lc-lowtiers-resources).
