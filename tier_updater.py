@@ -4,6 +4,7 @@ import sys
 import math
 import os
 import json
+import shutil
 
 # ==========================================
 # 1. Configuration Settings
@@ -36,8 +37,13 @@ def load_tiers_file(filepath):
             print(f" Error: '{filepath}' contains invalid JSON data.")
             sys.exit(1)
 
-def update_and_save_tiers(filepath, tier_data, rises, drops):
+def update_and_save_tiers(filepath, backup_filename, tier_data, rises, drops):
     """Updates the dictionary with shifts and saves it back to the JSON file."""
+    # Preserve the current tier data before overwriting it with new shifts.
+    backup_path = os.path.join(os.path.dirname(filepath), backup_filename)
+    shutil.copy2(filepath, backup_path)
+    print(f" Created backup of current tiers at '{backup_path}'.")
+
     # Process Rises (Move to LC OU)
     for mon in rises:
         for t in tier_data:
@@ -166,6 +172,7 @@ if __name__ == "__main__":
         print(" Please enter a valid date in YYYY-MM format (e.g., 2026-06).")
         
     dynamic_stats_url = f"https://www.smogon.com/stats/{yyyy_mm}/gen9lc-1630.txt"
+    backup_filename = f"tiers_backup_{yyyy_mm.replace('-', '')}.json"
 
     # Automatically determine the Quarter and Cycle Month
     if month_int in [12, 1, 2]:
@@ -181,6 +188,10 @@ if __name__ == "__main__":
         cycle_quarter = "Q4"
         cycle_month = {9: 1, 10: 2, 11: 3}[month_int]
 
+    # Tier shifts are published for the month after the usage-stat month.
+    display_month = ["January", "February", "March", "April", "May", "June",
+                     "July", "August", "September", "October", "November", "December"][month_int % 12]
+
     # Load live tiers from the JSON file
     raw_tier_data = load_tiers_file(TIERS_FILE)
     
@@ -195,12 +206,15 @@ if __name__ == "__main__":
     # Dynamic Math
     if cycle_month == 1:
         t_value = base_t
+        t_expression = "base_t"
         allow_rises = True
     elif cycle_month == 2:
         t_value = base_t * 2
+        t_expression = "base_t * 2"
         allow_rises = False
     elif cycle_month == 3:
         t_value = base_t * 3
+        t_expression = "base_t * 3"
         allow_rises = False
 
     if end_of_gen_mode:
@@ -220,7 +234,11 @@ if __name__ == "__main__":
         # Build the report string
         report_lines = []
         report_lines.append("========== TIER SHIFT REPORT ==========")
-        report_lines.append(f"Cycle: {cycle_quarter} - Month {cycle_month}")
+        report_lines.append("")
+        report_lines.append('[SPOILER="Base Data"]')
+        report_lines.append("")
+        report_lines.append(f"Cycle: {cycle_quarter} - Month {cycle_month} ({display_month})")
+        report_lines.append("")
         
         if not allow_rises:
             report_lines.append("Mode: Quick Drops Only (Rises Locked)")
@@ -229,10 +247,15 @@ if __name__ == "__main__":
         else:
             report_lines.append("Mode: Full Standard Shifts")
 
-        report_lines.append(f"Teams Parameter (T): {t_value}")
-        report_lines.append(f"Applied Cutoff: {cutoff * 100:.2f}%\n")
+        report_lines.append("")
+        report_lines.append(f"Teams Parameter (T): {t_value} ({t_expression})")
+        report_lines.append("")
+        report_lines.append(f"Applied Cutoff: {cutoff * 100:.2f}%")
+        report_lines.append("")
+        report_lines.append("[/SPOILER]")
+        report_lines.append("")
 
-        report_lines.append("[B]Rises (To LC OU):[/B]")
+        report_lines.append("**Rises (To LC OU):**")
         if not allow_rises:
             report_lines.append("None (Rises are locked for this cycle phase)")
         elif rises:
@@ -242,7 +265,8 @@ if __name__ == "__main__":
         else:
             report_lines.append("None")
 
-        report_lines.append("\n[B]Drops (From LC OU):[/B]")
+        report_lines.append("")
+        report_lines.append("**Drops (From LC OU):**")
         if drops:
             for mon in sorted(drops):
                 usage_pct = current_usage.get(mon, 0) * 100
@@ -264,4 +288,4 @@ if __name__ == "__main__":
 
         # Update and save the tiers JSON file if there were any shifts
         if rises or drops:
-            update_and_save_tiers(TIERS_FILE, raw_tier_data, rises, drops)
+            update_and_save_tiers(TIERS_FILE, backup_filename, raw_tier_data, rises, drops)
